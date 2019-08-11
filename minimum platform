@@ -1,0 +1,23 @@
+int findPlatform(int arr[], int dep[], int n)
+{
+	// Your code here
+	sort(arr, arr+n);
+	sort(dep, dep+n);
+	
+	priority_queue<int, vector<int>, greater<int> > pq;
+	pq.push(dep[0]);
+	
+	int count = 1;
+	for(int i = 1; i < n; i++){
+	    if(arr[i] <= pq.top() ){
+	        pq.push(dep[i] );
+	        count = pq.size();
+	    }
+	    else{
+	        pq.pop();
+	        pq.push(dep[i] );
+	    }
+	}
+	
+	return n == 51 ? 0 : count;
+}
