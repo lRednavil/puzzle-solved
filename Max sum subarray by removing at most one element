@@ -1,0 +1,33 @@
+/*You are required to complete below method */
+int maxSumSubarray(int A[], int n)
+{
+    //Your code here
+    int ldp[n];
+    int rdp[n];
+    ldp[0] = rdp[n-1] = 0;
+
+    for(int i = 1; i < n; i++){
+        if(ldp[i - 1] + A[i - 1] < A[i - 1])
+        ldp[i] = A[i - 1];
+        else
+        ldp[i] = ldp[i-1] + A[i-1];
+    }
+    
+    for(int i = n-2; i >= 0; i--){
+        if(rdp[i+1] + A[i + 1] < A[i + 1])
+        rdp[i] = A[i+1];
+        else
+        rdp[i] = rdp[i+1] + A[i+1];
+    }
+    
+    int mx = INT_MIN;
+
+    for(int i = 0; i < n; i++){
+        int temp = ldp[i] + rdp[i];
+        temp += A[i] > 0 ? A[i] : 0;
+        temp = max(temp, A[i]);
+        mx = max(mx, temp);
+    }
+    
+    return mx;
+}
