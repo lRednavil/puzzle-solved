@@ -1,0 +1,67 @@
+void printMaxOfMin(int arr[], int n) 
+{ 
+    //save index
+    int l[n], r[n];
+    
+    //first for val, second for index
+    stack<pair<int, int> > st;
+    
+    //start from 0 to next smaller
+    for(int i = 0; i < n; i++){
+        while(!st.empty() && st.top().first > arr[i] ){
+            l[st.top().second] = i;
+            st.pop();
+        }
+        
+        st.push({arr[i], i} );
+    }
+    
+    //rests don't have next smaller
+    while(!st.empty() ){
+        l[st.top().second] = n;
+        st.pop();
+    }
+    
+    //start from n-1 to previous smaller
+    for(int i = n-1; i >= 0; i--){
+        while(!st.empty() && st.top().first > arr[i] ){
+            r[st.top().second] = i;
+            st.pop();
+        }
+        
+        st.push({arr[i], i} );
+    }
+    
+    //rests don't have previous smaller
+    while(!st.empty() ){
+        r[st.top().second] = -1;
+        st.pop();
+    }
+    
+    //save each index's window size which can achieve minimum.
+    int len[n];
+    for(int i = 0; i < n; i++){
+        len[i] = l[i] - r[i] - 1;
+    }
+    
+    //most shortest length must greater than others.
+    //so compare max for each len[] can save maximum of minimum.
+    //caution :: ansswer array must be 1-indexed array because of window size start from 1.
+    int ans[n+1] = {};
+    for(int i = 0; i < n; i++){
+        ans[len[i] ] = max(ans[len[i] ], arr[i]);
+    }
+    
+    //prevent wrong answer from not entered data to ans[]
+    //prevent wrong answer from inverse of ans[]
+    for(int i = n-1; i >= 0; i--){
+        if(ans[i] < ans[i+1] ) ans[i] = ans[i+1];
+    }
+    
+    //print answers
+    for(int i = 1; i <= n; i++){
+        printf("%d ", ans[i] );
+    }
+    
+    printf("\n");
+} 
